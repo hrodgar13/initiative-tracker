@@ -29,7 +29,7 @@ export default function App() {
         setInitiativeList(list => [...list, newInitiative].sort((a, b) => b.initiative - a.initiative))
         setShowForm(false)
 
-        localStorage.setItem('initiativeList', initiativeList)
+        // localStorage.setItem('initiativeList', initiativeList)
     }
 
     function handleCardChange(changedCard){
@@ -47,7 +47,7 @@ export default function App() {
             })
         })
 
-        localStorage.setItem('initiativeList', initiativeList)
+        // localStorage.setItem('initiativeList', initiativeList)
     }
 
     function handleCreateCard({card, initiativeId}) {
@@ -63,12 +63,46 @@ export default function App() {
             })
         })
 
-        localStorage.setItem('initiativeList', initiativeList)
+        // localStorage.setItem('initiativeList', initiativeList)
+    }
+
+    function onInitiativeStart(initiativeId) {
+        setInitiativeList(list => {
+            return list.map(initiative => {
+                if(initiative.id === initiativeId) {
+                    const cards = initiative.cards.map(card => {
+                        let newHpCurrent = card.hp.current
+
+                        if(card.periodicalHpChange.damage) {
+                            const newHp = newHpCurrent - Math.abs(card.periodicalHpChange.damage)
+                            newHpCurrent = newHp < 0 ? 0 : newHp
+                        }
+
+                        if(card.hp.current !== 0 && !!card.periodicalHpChange.heal) {
+                            const newHp = newHpCurrent + Math.abs(card.periodicalHpChange.heal)
+                            newHpCurrent = newHp > card.hp.max ? card.hp.max : newHp
+                        }
+
+                        return {
+                            ...card,
+                            hp: {
+                                ...card.hp,
+                                current: newHpCurrent
+                            }
+                        }
+                    })
+
+                    return {...initiative, cards}
+                }
+
+                return initiative
+            })
+        })
     }
 
     return (
         <div className="App">
-            <InitiativeList initiativeList={initiativeList} onCardChange={handleCardChange} onCreateCard={handleCreateCard}/>
+            <InitiativeList initiativeList={initiativeList} onCardChange={handleCardChange} onCreateCard={handleCreateCard} onInitiativeStart={onInitiativeStart}/>
             {showForm && <InitiativeForm initiativeList={initiativeList} onSubmitForm={handleCreateInitiative}/>}
             <button onClick={handleShowForm}> {showForm ? 'Закрити' : 'Додати ініціативу'} </button>
         </div>

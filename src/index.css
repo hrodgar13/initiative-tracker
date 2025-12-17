@@ -189,3 +189,14 @@ li {
     flex-direction: column;
     gap: 10px;
 }
+
+.initiative-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.initiative-header button {
+    max-width: 260px;
+}
