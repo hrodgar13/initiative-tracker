@@ -100,9 +100,28 @@ export default function App() {
         })
     }
 
+    function handleRemoveCard(cardId) {
+        console.log(cardId)
+
+        setInitiativeList(list => {
+            return list.map(initiative => {
+
+                let cards = initiative.cards
+
+                const idx = initiative.cards.findIndex(card => card.id === cardId)
+
+                if(idx !== -1) {
+                    cards = initiative.cards.splice(idx, 1)
+                }
+
+                return {...initiative, cards}
+            })
+        })
+    }
+
     return (
         <div className="App">
-            <InitiativeList initiativeList={initiativeList} onCardChange={handleCardChange} onCreateCard={handleCreateCard} onInitiativeStart={onInitiativeStart}/>
+            <InitiativeList initiativeList={initiativeList} onCardChange={handleCardChange} onCreateCard={handleCreateCard} onInitiativeStart={onInitiativeStart} onRemoveCard={handleRemoveCard}/>
             {showForm && <InitiativeForm initiativeList={initiativeList} onSubmitForm={handleCreateInitiative}/>}
             <button onClick={handleShowForm}> {showForm ? 'Закрити' : 'Додати ініціативу'} </button>
         </div>
