@@ -2,9 +2,10 @@ import {useState} from "react";
 import '../index.css'
 import {InitiativeForm} from "./initiative/InitiativeForm";
 import {InitiativeList} from "./initiative/InitiativeList";
+import {useLocalStorage} from "../hooks/useLocalStorage";
 
 export default function App() {
-    const [initiativeList, setInitiativeList] = useState([])
+    const [initiativeList, setInitiativeList] = useLocalStorage([], 'initiative')
 
     const [showForm, setShowForm] = useState(false)
 
