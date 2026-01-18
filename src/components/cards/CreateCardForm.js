@@ -9,7 +9,7 @@ export function CreateCardForm({onCloseForm, onSubmitForm}) {
         e.preventDefault()
 
         const newCard = {
-            id: Math.random(),
+            id: crypto.randomUUID(),
             hp: {current: HP, max: HP},
             name,
             periodicalHpChange: {heal: 0, damage: 0}

@@ -30,7 +30,7 @@ export function Card({card, onCardChange, onCloneCard, onRemoveCard}) {
     }
 
     function handleCloneCard() {
-        const newCard = {...card, hp: {max: card.hp.max, current: card.hp.max}, id: Math.random()}
+        const newCard = {...card, hp: {max: card.hp.max, current: card.hp.max}, id: crypto.randomUUID()}
 
         onCloneCard(newCard)
     }

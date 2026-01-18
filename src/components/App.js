@@ -21,24 +21,22 @@ export default function App() {
         }
 
         const newInitiative = {
-            id: Math.random(),
+            id: crypto.randomUUID(),
             initiative,
             cards: []
         }
 
         setInitiativeList(list => [...list, newInitiative].sort((a, b) => b.initiative - a.initiative))
         setShowForm(false)
-
-        // localStorage.setItem('initiativeList', initiativeList)
     }
 
-    function handleCardChange(changedCard){
+    function handleCardChange(changedCard) {
         setInitiativeList(list => {
 
             return list.map(initiative => {
 
                 const changedCards = initiative.cards.map(card => {
-                    if(card. id === changedCard.id) return {...changedCard}
+                    if (card.id === changedCard.id) return {...changedCard}
 
                     return {...card}
                 })
@@ -46,14 +44,12 @@ export default function App() {
                 return {...initiative, cards: changedCards}
             })
         })
-
-        // localStorage.setItem('initiativeList', initiativeList)
     }
 
     function handleCreateCard({card, initiativeId}) {
         setInitiativeList(list => {
             return list.map(initiative => {
-                if(initiative.id === initiativeId) {
+                if (initiative.id === initiativeId) {
                     const newCards = [...initiative.cards, card]
 
                     return {...initiative, cards: newCards}
@@ -62,23 +58,21 @@ export default function App() {
                 return initiative
             })
         })
-
-        // localStorage.setItem('initiativeList', initiativeList)
     }
 
     function onInitiativeStart(initiativeId) {
         setInitiativeList(list => {
             return list.map(initiative => {
-                if(initiative.id === initiativeId) {
+                if (initiative.id === initiativeId) {
                     const cards = initiative.cards.map(card => {
                         let newHpCurrent = card.hp.current
 
-                        if(card.periodicalHpChange.damage) {
+                        if (card.periodicalHpChange.damage) {
                             const newHp = newHpCurrent - Math.abs(card.periodicalHpChange.damage)
                             newHpCurrent = newHp < 0 ? 0 : newHp
                         }
 
-                        if(card.hp.current !== 0 && !!card.periodicalHpChange.heal) {
+                        if (card.hp.current !== 0 && !!card.periodicalHpChange.heal) {
                             const newHp = newHpCurrent + Math.abs(card.periodicalHpChange.heal)
                             newHpCurrent = newHp > card.hp.max ? card.hp.max : newHp
                         }
@@ -101,8 +95,6 @@ export default function App() {
     }
 
     function handleRemoveCard(cardId) {
-        console.log(cardId)
-
         setInitiativeList(list => {
             return list.map(initiative => {
 
@@ -110,7 +102,7 @@ export default function App() {
 
                 const idx = initiative.cards.findIndex(card => card.id === cardId)
 
-                if(idx !== -1) {
+                if (idx !== -1) {
                     cards = initiative.cards.splice(idx, 1)
                 }
 
@@ -121,7 +113,12 @@ export default function App() {
 
     return (
         <div className="App">
-            <InitiativeList initiativeList={initiativeList} onCardChange={handleCardChange} onCreateCard={handleCreateCard} onInitiativeStart={onInitiativeStart} onRemoveCard={handleRemoveCard}/>
+            <InitiativeList
+                initiativeList={initiativeList}
+                onCardChange={handleCardChange}
+                onCreateCard={handleCreateCard}
+                onInitiativeStart={onInitiativeStart}
+                onRemoveCard={handleRemoveCard}/>
             {showForm && <InitiativeForm initiativeList={initiativeList} onSubmitForm={handleCreateInitiative}/>}
             <button onClick={handleShowForm}> {showForm ? 'Закрити' : 'Додати ініціативу'} </button>
         </div>
