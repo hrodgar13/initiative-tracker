@@ -97,15 +97,7 @@ export default function App() {
     function handleRemoveCard(cardId) {
         setInitiativeList(list => {
             return list.map(initiative => {
-
-                let cards = initiative.cards
-
-                const idx = initiative.cards.findIndex(card => card.id === cardId)
-
-                if (idx !== -1) {
-                    cards = initiative.cards.splice(idx, 1)
-                }
-
+                const cards = initiative.cards.filter(card => card.id !== cardId)
                 return {...initiative, cards}
             })
         })
